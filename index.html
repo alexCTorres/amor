@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Ti ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    color: white;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Tarjeta inicial */
+.card {
+    background: rgba(255,255,255,0.18);
+    padding: 30px;
+    border-radius: 25px;
+    max-width: 90%;
+    margin: 90px auto;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+/* Botones */
+.botones {
+    margin-top: 25px;
+}
+
+button {
+    padding: 14px 26px;
+    font-size: 1em;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+}
+
+#btnSi {
+    background: #ff4d6d;
+    color: white;
+}
+
+#btnNo {
+    background: #999;
+    color: white;
+    position: relative;
+}
+
+/* Galería */
+#galeria {
+    display: none;
+    margin-top: 40px;
+    animation: fadeIn 1.5s ease;
+}
+
+#fotoActual {
+    width: 85%;
+    max-width: 340px;
+    border-radius: 25px;
+    margin-top: 20px;
+    opacity: 0;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes aparecer {
+    0% {
+        opacity: 0;
+        filter: blur(12px);
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: scale(1);
+    }
+}
+
+/* Corazones */
+.corazon {
+    position: fixed;
+    top: -10px;
+    font-size: 22px;
+    animation: caer linear forwards;
+}
+
+@keyframes caer {
+    to {
+        transform: translateY(110vh);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+    <h1>Mi Reina Hermosa 💖</h1>
+    <p>
+        Desde que llegaste a mi vida,<br>
+        todo se siente más bonito ✨<br><br>
+Quiero seguir compartiendo mas momentos únicos que alegran mis dias,<br>
+te has convertido en una persona muy importante en mi vida por todo <br>
+lo que hemos vivido y pasado en tan poco tiempo, te quiero mucho🥰 y <br>
+quisiera saber si estas dispuesta ha aceptar mi siguiente propuesta: </p>
+
+    <h2>¿Quieres ser mi novia? 🥰</h2>
+
+    <div class="botones">
+        <button id="btnSi">Sí 💘</button>
+        <button id="btnNo">No 😅</button>
+    </div>
+</div>
+
+<div id="galeria">
+    <h2>💖 Nuestros momentos 💖</h2>
+    <img id="fotoActual" src="">
+    <p>Esto recién comienza… 💕</p>
+</div>
+
+<audio id="musica" src="amor.mp4" loop></audio>
+
+<script>
+const btnNo = document.getElementById("btnNo");
+const btnSi = document.getElementById("btnSi");
+const musica = document.getElementById("musica");
+const galeria = document.getElementById("galeria");
+const foto = document.getElementById("fotoActual");
+
+/* Fotos */
+const fotos = [
+    "f1.jpeg",
+    "f2.jpeg",
+    "f3.jpeg",
+    "f4.jpeg",
+    "f5.jpeg",
+    "f6.jpeg",
+    "f7.jpeg",
+    "f8.jpeg"
+];
+
+/* Filtros tipo Instagram */
+const filtros = [
+    "brightness(1.1) contrast(1.1) saturate(1.3)",                // vivo
+    "sepia(0.25) contrast(1.2)",                                   // vintage
+    "brightness(1.15) saturate(1.4) hue-rotate(-10deg)",           // rosado
+    "contrast(1.1) brightness(1.05) saturate(1.2)"                 // clean
+];
+
+let indice = 0;
+
+/* Botón NO huye */
+btnNo.addEventListener("mouseover", moverNo);
+btnNo.addEventListener("touchstart", moverNo);
+
+function moverNo() {
+    btnNo.style.position = "fixed";
+    const x = Math.random() * (window.innerWidth - btnNo.offsetWidth);
+    const y = Math.random() * (window.innerHeight - btnNo.offsetHeight);
+    btnNo.style.left = x + "px";
+    btnNo.style.top = y + "px";
+}
+
+/* Al decir SÍ */
+btnSi.addEventListener("click", () => {
+    document.getElementById("card").style.display = "none";
+    btnNo.style.display = "none";
+    galeria.style.display = "block";
+    musica.play();
+
+    if (navigator.vibrate) {
+        navigator.vibrate([200, 100, 200]);
+    }
+
+    iniciarCorazones();
+    mostrarFotos();
+});
+
+/* Mostrar fotos con efectos */
+function mostrarFotos() {
+    foto.style.opacity = 0;
+
+    setTimeout(() => {
+        foto.src = fotos[indice];
+        foto.style.filter = filtros[indice % filtros.length];
+        foto.style.animation = "none";
+        foto.offsetHeight; // reset animación
+        foto.style.animation = "aparecer 2s forwards";
+
+        indice = (indice + 1) % fotos.length;
+    }, 300);
+
+    setTimeout(mostrarFotos, 3500);
+}
+
+/* Corazones */
+function iniciarCorazones() {
+    setInterval(() => {
+        const corazon = document.createElement("div");
+        corazon.classList.add("corazon");
+        corazon.innerHTML = "❤️";
+        corazon.style.left = Math.random() * 100 + "vw";
+        corazon.style.animationDuration = (3 + Math.random() * 3) + "s";
+        document.body.appendChild(corazon);
+
+        setTimeout(() => corazon.remove(), 6000);
+    }, 300);
+}
+</script>
+
+</body>
+</html>
